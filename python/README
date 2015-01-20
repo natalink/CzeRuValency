@@ -1,0 +1,9 @@
+Conversion of Ruslan dictionary that has a most unreadible format, ex:
+====
+DODRZ3E==R(5,SAM,?(N(+(*H,*INS,*Z,*P,*R),N),A(-(*H),A) or N(-(*H),N),  I(+(*H,*INS,*Z,*P,*R),I)),20,SOBLJUSTI)
+====
+into a more human-readible entry containing right-hand valency information:
+
+dodržet + Acc -> sobljusti + Acc
+
+

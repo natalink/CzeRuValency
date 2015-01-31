@@ -1,0 +1,5 @@
+PASS 'which mkdir' test displayed the path correctly
+PASS 'mkdir' command can not be run without arguments
+PASS 'mkdir dir' command correctly created a directory folder_8726
+PASS 'mkdir existing_dir' should not create a directory which already exists
+FAIL 'mkdir -v dir' created a directory, but the message was not displayed

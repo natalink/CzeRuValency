@@ -16,7 +16,7 @@ echo "======End of testing ***mkdir which***========"
 echo
 echo
 
-echo "====Testing ***mkdir*** without arguments, displaying help info:====="
+echo "====Testing ***mkdir*** without arguments====="
 mkdir
 if [ $? -eq 1 ]
 then

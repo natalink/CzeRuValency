@@ -1,32 +1,75 @@
 #!/usr/bin/python
-# -*- coding: utf-8 -*-
 
+import sys
+import string
 import subprocess
 import os.path
-from random import randint
 
-print '-'*10, "which_mkdir test running...", '-'*10
-return_code = subprocess.call("which mkdir", shell=True)
-if ( return_code == 0):
-    print "PASS <which mkdir displayed the path to mkdir>"
-else:
-    print "FAIL <command 'which mkdir' failed to display path>"
-print '-'*10, "end of which_mkdir test", '-'*10
-print
+class TestMkdir():
+
+    def __init__(self):
+        self.count_failed = 0
+        self.summary = []
+
+    def process_0(self, arg_msg):
+        arg, msg = arg_msg[0], arg_msg[1]
+        cmd = 'mkdir '+ arg
+        print '*'*5, cmd, '*'*5
+        return_code = subprocess.call(cmd, shell=True)
+        if return_code == 0:
+            summ = "PASS <" + msg + ", and it worked>"
+            print summ
+            self.summary.append(summ)
+        else:
+            print "FAIL <", msg, ", and it did not work>"
+            self.count_failed += 1
+        if arg.startswith('d'):
+            self.cleanup(arg)
+        print '*'*10
+        return self.count_failed, self.summary
+
+    def process_1(self, arg_msg):
+        arg, msg = arg_msg[0], arg_msg[1]
+        cmd = 'mkdir '+ arg + '2 > stderr.log'
+        print '*'*5, cmd, '*'*5
+        return_code = subprocess.call(cmd, shell=True)
+        if return_code == 1:
+            print "PASS <", msg, ", and it worked>"
+        else:
+            print "FAIL <", msg, ", and it did not work>"
+            self.count_failed += 1
+        if arg.startswith('d'):
+            self.cleanup(arg)
+        print '*'*10
+        return self.count_failed, self.summary
+
+    def cleanup(self,arg):
+        remove_dir = 'rm -r ' + arg
+        print remove_dir
+        subprocess.call(remove_dir, shell=True)
 
 
-print '-'*10, "mkdir_folder test running", '-'*10
-random_num = randint(1,1000000)
-dirname = "dirname_" + str(random_num)
-mkdir_cmd = "mkdir " + dirname
-rm_cmd = "rm -r " + dirname
-return_code = subprocess.call(mkdir_cmd, stderr=subprocess.STDOUT, shell=True)
-#print mkdir_cmd, " process run, and file exsists: ", os.path.exists(dirname)
-if (return_code == 0):
-    print "PASS <mkdir created a new folder, functionality tested, now the folder will be removed>"
-else:
-    print "FAIL <unable to create a folder>"
-subprocess.call(rm_cmd, stderr=subprocess.STDOUT, shell=True) #cleaning
-print '-'*10, "end of mkdir_folder test", '-'*10
+if __name__ == "__main__":
+    test = TestMkdir()
+    failed = 0
+    args_0 = [
+        ['--help', 'Expected: short manual displayed'],
+        ['directory', 'Expected: directory created'],
+        ['-p dir/dir1/dir2', 'Expected: embedded directories created']
+    ]
+    args_1 = [
+        ['', 'Expected: can not run without args']
+    ]
+    for arg in args_0:
+        failed, summary = test.process_0(arg)
 
+    for arg in args_1:
+        failed = test.process_1(arg)
 
+    if ( failed > 0 ):
+        print "TEST FAIL: ", failed, " checks failed. Summary: "
+    else:
+        print "TEST PASSED: "
+
+    for summ in summary:
+        print summ

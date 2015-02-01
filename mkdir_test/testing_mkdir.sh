@@ -67,7 +67,6 @@ NEWDIR=mkdirv_$RANDOM
 MKDIR_V="$(mkdir -v $NEWDIR)"
 if [ $? -eq 0 ]
 then
-    echo "MKDIRV: "$MKDIR_V
     if [[ $MKDIR_V == "mkdir: created directory '$NEWDIR'" ]]
     then 
         echo "PASS 'mkdir -v dir' created a folder and displayed on the STDOUT that it was created>" | tee -a log.txt
@@ -83,6 +82,63 @@ rm -r $NEWDIR
 echo "======End of testing ***mkdir -v dir***========"
 echo
 echo
+
+echo "====Testing ***mkdir --help***====="
+if [ $? -eq 0 ]
+then
+	echo "PASS 'mkdir --help' displayed help>" | tee -a log.txt
+else
+        echo "FAIL 'mkdir --help' help was not displayed" | tee -a log.txt
+        ((FAILED+=1))
+fi
+echo "======End of testing ***mkdir --help***========"
+echo
+echo
+
+echo "====Testing ***mkdir -p dir***====="
+NEWDIR=parentdir/dir/dir
+MKDIR_P="$(mkdir -p $NEWDIR)"
+if [ $? -eq 0 ]
+then
+    echo "PASS 'mkdir -p dir/dir' created a parent directory" | tee -a log.txt
+else
+    echo "FAIL 'mkdir -p dir/dir'  did not create a parent directory" | tee -a log.txt
+    ((FAILED+=1))
+fi
+rm -r $NEWDIR
+echo "======End of testing ***mkdir -p dir***========"
+echo
+echo
+
+echo "====Testing ***mkdir -m permissons dir***====="
+NEWDIR=mkdirm
+MKDIR_M="$(mkdir -m 777 $NEWDIR)"
+if [ $? -eq 0 ]
+then
+    echo "PASS 'mkdir -m 777 dir' created a directory with any possible permissions>" | tee -a log.txt
+else
+    echo "FAIL 'mkdir -m 777 dir' failed to create a directory with all permissions " | tee -a log.txt
+    ((FAILED+=1))
+fi
+rm -r $NEWDIR
+echo "======End of testing ***mkdir -m permissions dir***========"
+echo
+echo
+
+echo "====Testing ***mkdir --version***====="
+mkdir --version
+if [ $? -eq 0 ]
+then
+    echo "PASS 'mkdir -version' displayed version information>" | tee -a log.txt
+else
+    echo "FAIL 'mkdir --version' did not display version information" | tee -a log.txt
+        ((FAILED+=1))
+fi
+echo "======End of testing ***mkdir --version***========"
+echo
+echo
+
+
 
 if [ $FAILED -eq 0 ]; #TODO it some other way
 then

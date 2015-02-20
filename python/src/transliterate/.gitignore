@@ -1,0 +1,15 @@
+*.py[cod]
+.hgignore~
+.gitignore~
+.travis.yml~
+.hg/
+.tox
+
+example/db/
+example/tmp/
+build/
+builddocs/
+builddocs.zip
+dist/
+src/transliterate.egg-info
+

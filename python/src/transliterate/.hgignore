@@ -1,0 +1,15 @@
+syntax: regexp
+\.pyc$
+\.hgignore~
+\.git/
+\.gitignore~
+\.travis.yml~
+\.tox
+
+^example/db/
+^example/tmp/
+^build/
+^builddocs/
+^builddocs.zip
+^dist/
+^src/transliterate\.egg-info

@@ -5,7 +5,7 @@ import sys
 import string
 import re
 import codecs
-import translit_ruslan as ruslan
+from transliterate import translit
 
 class Processor():
 
@@ -16,6 +16,9 @@ class Processor():
         #print "Czech: ", czech
 
         russian = self.get_russian(rest)
+        #russian_tr = self.ruslan_translit(russian)
+        #russian = translit(russian, "ru")
+        #print "RUSSIAN: ", russian
         #transliterated_russian = ruslan.to_rus(russian)
         #print "Transliterated RUSSIAN: ", transliterated_russian
         raw_frame = self.get_rawframe(rest)
@@ -23,7 +26,7 @@ class Processor():
         for key, value in valdict.iteritems():
 
          #   print "TRANSFORMED: czech: %s %s -> %s %s" % (czech, key, russian, value)
-            out_line = "%s %s -> %s %s" % (czech, key, russian, value)
+            out_line = "%s\t%s\t%s\t%s" % (czech, key, russian, value)
 
             return out_line
         #print '-'*10
@@ -44,11 +47,16 @@ class Processor():
             #print "Russian: ", russian.group(1)
             return russian.group(1)
 
+    def ruslan_translit(self,russian):
+        table = {'c2':'ch', 's2':'sh', 's3':'shch', "6":"'", 'ja':'ja', 'ch': 'kh', 'ju': 'ju'}
+        for k in table.keys():
+            translit = russian.replace(k,table[k])
+            return translit
+
     def change_case(self,case):
         table2 = {'a':' + Acc', 'i':' + Ins', 'g':' + Gen', 'd':' + Dat'}
         for k in table2.keys():
             case = case.replace(k,table2[k])
-
         return case
 
     def get_rawframe(self, rest):
